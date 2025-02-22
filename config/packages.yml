@@ -1,6 +1,5 @@
 linux_packages:
   - wget
-  - net-tools
 
 
 python_packages:
@@ -8,3 +7,6 @@ python_packages:
   - pandas
   - dowhy
   - econml
+  - scikit-learn
+  - scipy
+  - shap

@@ -2,6 +2,7 @@
   hosts: localhost
   become: yes
   vars_files:
+    - ../config/packages.yml
     - ../config/config.yml
 
   tasks:
@@ -18,7 +19,7 @@
     # 安裝套件
     - name: Install Packages in All Containers
       shell: |
-        docker exec {{ item }} bash -c "apt update && apt install -y {{ packages | joint(' ') }}"
+        docker exec {{ item }} bash -c "apt update && apt install -y {{ linux_packages | join(' ') }}"
       loop: "{{ nodes }}"
 
 

@@ -17,6 +17,3 @@ environment_name: fed_causal_forest
 
 # Python 版本
 python_version: "3.11"
-
-
-python_packages:
