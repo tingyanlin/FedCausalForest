@@ -1,0 +1,10 @@
+linux_packages:
+  - wget
+  - net-tools
+
+
+python_packages:
+  - numpy
+  - pandas
+  - dowhy
+  - econml

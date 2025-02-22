@@ -1,0 +1,32 @@
+- name: Setup Environment
+  hosts: localhost
+  become: yes
+  vars_files:
+    - ../config/config.yml
+
+  tasks:
+    # 建立 docker 網路
+    - name: Create Docker Network
+      shell: docker network create {{ docker_network }}
+      ignore_errors: yes
+
+    # 啟動 master 跟 client 的容器
+    - name: Run Containers for Nodes
+      shell: docker run -idt --name {{ item }} --network {{ docker_network }} ubuntu
+      loop: "{{ nodes }}"
+
+    # 安裝套件
+    - name: Install Packages in All Containers
+      shell: |
+        docker exec {{ item }} bash -c "apt update && apt install -y {{ packages | joint(' ') }}"
+      loop: "{{ nodes }}"
+
+
+
+
+
+
+
+
+
+
