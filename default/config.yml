@@ -1,0 +1,19 @@
+# Docker Network
+docker_network: fed_causal_forest_network
+
+# Docker 節點
+nodes:
+  - master_node
+  - client_1_node
+  - client_2_node
+
+# Miniconda
+miniconda_url: "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+miniconda_installer: "Miniconda3-latest-Linux-x86_64.sh"
+
+
+
+environment_name: fed_causal_forest
+
+# Python 版本
+python_version: "3.11"

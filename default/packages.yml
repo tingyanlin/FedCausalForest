@@ -1,0 +1,12 @@
+linux_packages:
+  - wget
+
+
+python_packages:
+  - numpy
+  - pandas
+  - dowhy
+  - econml
+  - scikit-learn
+  - scipy
+  - shap
