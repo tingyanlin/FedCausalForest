@@ -2,30 +2,39 @@
   hosts: localhost
   become: yes
   vars_files:
-    - ../config/packages.yml
-    - ../config/config.yml
+    - ../default/packages.yml
+    - ../default/config.yml
 
-  task:
-    # 下載並安裝 Miniconda
-    - name: Download and install miniconda in all containers
+  tasks:
+    # 下載 miniconda
+    - name: Download Miniconda in All Containers
       shell: |
-        docker exec {{ item }} bash -c "cd /home && \
+        docker exec {{ item }} bash -c "
+          cd /home && \
           wget {{ miniconda_url }} && \
-          chmod +x {{ miniconda_installer }} && \
-          bash {{ miniconda_installer }} -b %% \
-          rm {{ miniconda_installer }}"
+          chmod +x {{ miniconda_installer }}"
+      loop: "{{ nodes }}"
+
+    # 安裝  miniconda
+    - name: Install Miniconda in All Containers
+      shell: |
+        docker exec {{ item }} bash -c "
+          cd /home && \
+          bash {{ miniconda_installer }} -b && \
+          rm {{ miniconda_installer }} && \
+        
+          echo 'export PATH=/root/miniconda3/bin:$PATH' >> /root/.bashrc && \
+          source /root/.bashrc"
       loop: "{{ nodes }}"
 
     # 建立虛擬環境
-    - name: Create Conda Environment
+    - name: Create Conda Environment in All Containers
       shell: |
-        docker exec {{ item }} bash -c "conda create --name {{ environment_name }} python={{ python_version }} -y"
-      loop: "{{ nodes }}"
-
-    # 建立虛擬環境
-    - name: Activate Conda Environment
-      shell: |
-        docker exec {{ item }} bash -c "conda activate {{ environment_name }} && \
+        docker exec {{ item }} bash -c "
+          export PATH=/root/miniconda3/bin:$PATH && \
+          source /root/miniconda3/etc/profile.d/conda.sh && \
+        
+          conda create --name {{ environment_name }} python={{ python_version }} -y
+          conda activate {{ environment_name }} && \
           conda install -y -c conda-forge {{ python_packages | join(' ') }}"
       loop: "{{ nodes }}"
-
