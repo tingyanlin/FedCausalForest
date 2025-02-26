@@ -2,14 +2,20 @@
   hosts: localhost
   become: yes
   vars_files:
-    - ../config/packages.yml
-    - ../config/config.yml
+    - ../default/packages.yml
+    - ../default/config.yml
 
   tasks:
-    # 建立 docker 網路
-    - name: Create Docker Network
-      shell: docker network create {{ docker_network }}
+    # 檢查 docker 網路
+    - name: Check If Docker Networks Exists
+      shell: "docker network ls --format '{{ '{{' }} .Name {{ '}}' }}' | grep -w {{ docker_network }}"
+      register: network_check
       ignore_errors: yes
+
+    # 建立 docker 網路
+    - name: Create Docker Network If It Does Not Exist
+      shell: docker network create {{ docker_network }}
+      when: network_check.rc != 0
 
     # 啟動 master 跟 client 的容器
     - name: Run Containers for Nodes
@@ -17,9 +23,11 @@
       loop: "{{ nodes }}"
 
     # 安裝套件
-    - name: Install Packages in All Containers
+    - name: Install Linux Packages in All Containers
       shell: |
-        docker exec {{ item }} bash -c "apt update && apt install -y {{ linux_packages | join(' ') }}"
+        docker exec {{ item }} bash -c "
+        apt update && \
+        apt install -y {{ linux_packages | join(' ') }}"
       loop: "{{ nodes }}"
 
 

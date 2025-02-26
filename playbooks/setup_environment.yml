@@ -2,48 +2,39 @@
   hosts: localhost
   become: yes
   vars_files:
-    - ../config/packages.yml
-    - ../config/config.yml
+    - ../default/packages.yml
+    - ../default/config.yml
 
   tasks:
-    # 下載並安裝 Miniconda
-    - name: Download and install miniconda in all containers
+    # 下載 miniconda
+    - name: Download Miniconda in All Containers
       shell: |
         docker exec {{ item }} bash -c "
           cd /home && \
           wget {{ miniconda_url }} && \
-          chmod +x {{ miniconda_installer }} && \
+          chmod +x {{ miniconda_installer }}"
+      loop: "{{ nodes }}"
+
+    # 安裝  miniconda
+    - name: Install Miniconda in All Containers
+      shell: |
+        docker exec {{ item }} bash -c "
+          cd /home && \
           bash {{ miniconda_installer }} -b && \
           rm {{ miniconda_installer }} && \
+        
           echo 'export PATH=/root/miniconda3/bin:$PATH' >> /root/.bashrc && \
           source /root/.bashrc"
       loop: "{{ nodes }}"
 
-    # 建立虛擬環境
-    - name: Create Conda Environment
+    # 建立虛擬環境與安裝套件
+    - name: Create Conda Environment and Install Python Packages in All Containers
       shell: |
         docker exec {{ item }} bash -c "
           export PATH=/root/miniconda3/bin:$PATH && \
-          conda install -y -c conda-forge {{ python_packages | join(' ') }}"
-      loop: "{{ nodes }}"
-
-
-
-    # 建立虛擬環境
-    - name: Create Conda Environment
-      shell: |
-        docker exec {{ item }} bash -c "
-          export PATH=/root/miniconda3/bin:$PATH && \
-          conda create --name {{ environment_name }} python={{ python_version }} -y"
-      loop: "{{ nodes }}"
-
-    # 安裝 python 套件
-    - name: Activate Conda Environment and Install Python Packages
-      shell: |
-        docker exec {{ item }} bash -c "
-          export PATH=/root/miniconda3/bin:$PATH && \
-          conda init {{ environment_name }} && \
+          source /root/miniconda3/etc/profile.d/conda.sh && \
+        
+          conda create --name {{ environment_name }} python={{ python_version }} -y
           conda activate {{ environment_name }} && \
           conda install -y -c conda-forge {{ python_packages | join(' ') }}"
       loop: "{{ nodes }}"
-
