@@ -1,3 +1,4 @@
+執行以下命令
 ```bash
-ansible-playbook fl_setup.yml
+ansible-playbook main.yml
 ```
