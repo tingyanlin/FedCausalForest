@@ -27,8 +27,8 @@
           source /root/.bashrc"
       loop: "{{ nodes }}"
 
-    # 建立虛擬環境
-    - name: Create Conda Environment in All Containers
+    # 建立虛擬環境與安裝套件
+    - name: Create Conda Environment and Install Python Packages in All Containers
       shell: |
         docker exec {{ item }} bash -c "
           export PATH=/root/miniconda3/bin:$PATH && \

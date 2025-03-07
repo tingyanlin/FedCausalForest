@@ -4,4 +4,17 @@
     <option name="sdkName" value="causal" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="causal" project-jdk-type="Python SDK" />
+  <component name="RMarkdownSettings">
+    <option name="renderProfiles">
+      <map>
+        <entry key="file://$PROJECT_DIR$/scripts/python/alg/HW2.rmd">
+          <value>
+            <RMarkdownRenderProfile>
+              <option name="outputDirectoryUrl" value="file://$PROJECT_DIR$/scripts/python/alg" />
+            </RMarkdownRenderProfile>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
 </project>
