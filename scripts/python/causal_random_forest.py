@@ -1,4 +1,4 @@
-import numpy as np
+# 標準庫與第三方套件
 import pandas as pd
 
 from econml.dml import CausalForestDML
@@ -53,17 +53,3 @@ class CausalRandomForest:
         )
 
         self.model.fit(Y=Y, T=T, X=X, cache_values=True) # cache_values 為存取統計數據
-
-    def predict_effect(self):
-        if self.model is None:
-            raise ValueError('Model is not fit')
-
-        X = self.data[self.feature_columns].values
-
-        # 若 T 為連續變數使用 TE
-        treatment_effect = self.model.effect(X)
-
-        # 若 T 為離散變數使用 ATE
-        # average_treatment_effect = self.model.ate(X)
-
-        return treatment_effect
