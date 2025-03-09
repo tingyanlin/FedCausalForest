@@ -1,19 +1,22 @@
 
-### 資料夾結構
-```python
+### 專案結構
+```bash
 FedCausalForest
 ├── default/
-│   ├── config.yml
-│   └── packages.yml
+│   ├── config.yml # 參數設定
+│   └── packages.yml # Ubuntu 與 anaconda 套件設定
 │
 ├── playbooks/
-│   ├── setup_environment.yml 
+│   ├── setup_environment.yml # 設置 anaconda 開發環境
 │   └── setup_nodes.yml # 設置 docker 節點
 ├── scripts/
-│   ├── python/
-│       ├── 
-│       ├── 
-│
+│   └── python/
+│       ├── data/ # 放置資料集、輸出結果
+│       ├── analysis.py # 資料分析程式
+│       ├── csusal_random_forest.py # 因果森林程式
+│       ├── config.py # 程式參數設定
+│       └── main.py
+│ 
 └── main.yml
 ```
 
