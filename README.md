@@ -1,6 +1,6 @@
 
 ### 資料夾結構
-```
+```python
 FedCausalForest
 ├── default/
 │   ├── config.yml
