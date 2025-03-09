@@ -31,7 +31,7 @@ sudo apt install ansible
 pip install ansible
 ```
 
-#### 執行以下命令
+### 執行以下命令
 ```bash
 ansible-playbook main.yml
 ```
