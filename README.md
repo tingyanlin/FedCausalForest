@@ -3,15 +3,18 @@
 ```
 FedCausalForest
 ├── default/
-│   ├── main.py
-│   ├── utils.py
-│   └── config/
-│       ├── settings.json
-│       └── database.json
+│   ├── config.yml
+│   └── packages.yml
+│
 ├── playbooks/
-│   ├── README.md
-│   └── guide.md
-└── requirements.txt
+│   ├── setup_environment.yml 
+│   └── setup_nodes.yml # 設置 docker 節點
+├── scripts/
+│   ├── python/
+│       ├── 
+│       ├── 
+│
+└── main.yml
 ```
 
 
