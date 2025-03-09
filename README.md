@@ -2,13 +2,14 @@
 
 #### 安裝Ansile
 ```bash
-//:Ubuntu
+# 安裝 Ansible 在 Ubuntu 上
 sudo apt install ansible
 
-//:Python
+# 安裝 Ansible 在 Python 環境中
 pip install ansible
 ```
-執行以下命令
+
+#### 執行以下命令
 ```bash
 ansible-playbook main.yml
 ```
