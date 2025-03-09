@@ -2,10 +2,10 @@
 
 #### 安裝Ansile
 ```bash
-Ubuntu
+//:Ubuntu
 sudo apt install ansible
 
-Python
+//:Python
 pip install ansible
 ```
 執行以下命令
