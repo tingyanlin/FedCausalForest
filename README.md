@@ -37,4 +37,4 @@ ansible-playbook main.yml
 ```
 
 #### 3. EconML
-[conML官方文檔](https://econml.azurewebsites.net/)
+[EconML官方文檔](https://econml.azurewebsites.net/)
