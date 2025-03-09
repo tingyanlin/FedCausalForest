@@ -1,8 +1,8 @@
 
 ### 資料夾結構
-
+```
 FedCausalForest
-  ├── default/
+├── default/
 │   ├── main.py
 │   ├── utils.py
 │   └── config/
@@ -12,7 +12,7 @@ FedCausalForest
 │   ├── README.md
 │   └── guide.md
 └── requirements.txt
-
+```
 
 
 ### Ansible
