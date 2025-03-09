@@ -2,7 +2,7 @@
 ### 資料夾結構
 
 FedCausalForest
-├── default/
+  ├── default/
 │   ├── main.py
 │   ├── utils.py
 │   └── config/
