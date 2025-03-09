@@ -1,4 +1,4 @@
-### 1. 專案結構
+#### 1. 專案結構
 ```bash
 FedCausalForest
 ├── default/
@@ -20,8 +20,8 @@ FedCausalForest
 └── main.yml
 ```
 
-### 2. Ansible [Ansible官方文檔](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html)
-#### 安裝Ansible
+#### 2. Ansible [Ansible官方文檔](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html)
+##### 安裝Ansible
 ```bash
 # 安裝 Ansible 在 Ubuntu 上
 sudo apt install ansible
@@ -30,9 +30,9 @@ sudo apt install ansible
 pip install ansible
 ```
 
-### 執行以下命令
+##### 執行以下命令
 ```bash
 ansible-playbook main.yml
 ```
 
-### 3. EconML [EconML官方文檔](https://econml.azurewebsites.net/)
+#### 3. EconML [EconML官方文檔](https://econml.azurewebsites.net/)
