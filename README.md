@@ -15,7 +15,8 @@ FedCausalForest
 │       ├── analysis.py # 資料分析程式
 │       ├── csusal_random_forest.py # 因果森林程式
 │       ├── config.py # 程式參數設定
-│       └── main.py
+│       ├── main.py
+│       └── visualization.py # 可視化程式
 │ 
 └── main.yml
 ```
