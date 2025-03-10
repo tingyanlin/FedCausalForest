@@ -10,11 +10,12 @@ import config
 
 class CausalRandomForest:
     def __init__(self, data_path, outcome_column, treatment_column,
-                 n_estimators, min_samples_leaf, random_state):
+                 n_estimators, max_depth, min_samples_leaf, random_state):
         self.data_path = data_path
         self.outcome_column = outcome_column
         self.treatment_column = treatment_column
         self.n_estimators = n_estimators
+        self.max_depth = max_depth
         self.min_samples_leaf = min_samples_leaf
         self.random_state = random_state
         self.data = None
@@ -43,11 +44,13 @@ class CausalRandomForest:
         self.model = CausalForestDML(
             model_y=RandomForestRegressor(
                 n_estimators=self.n_estimators,
+                max_depth=self.max_depth,
                 min_samples_leaf=self.min_samples_leaf,
                 random_state=self.random_state
             ),
             model_t=config.CAUSAL_FOREST_CONFIG['MODEL_T'],
             n_estimators=self.n_estimators,
+            max_depth=self.max_depth,
             min_samples_leaf=self.min_samples_leaf,
             random_state=self.random_state
         )

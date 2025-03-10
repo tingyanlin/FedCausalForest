@@ -3,6 +3,7 @@ import pandas as pd
 
 # 自訂義檔案
 import analysis
+import visualization
 import config
 
 from causal_random_forest import CausalRandomForest
@@ -14,11 +15,11 @@ def main():
         config.CAUSAL_FOREST_CONFIG['OUTCOME_COLUMN'],
         config.CAUSAL_FOREST_CONFIG['TREATMENT_COLUMN'],
         config.CAUSAL_FOREST_CONFIG['N_ESTIMATORS'],
+        config.CAUSAL_FOREST_CONFIG['MAX_DEPTH'],
         config.CAUSAL_FOREST_CONFIG['MIN_SAMPLES_LEAF'],
         config.CAUSAL_FOREST_CONFIG['RANDOM_STATE'])
 
     model.fit()
-
 
     # 計算 treatment effect 與 confidence interval
     effect, lower, upper = analysis.predict_effect_with_ci(
@@ -48,6 +49,30 @@ def main():
     feature_importance_df = feature_importance_df.sort_values(by='Importance', ascending=False)
 
     analysis.save_results(feature_importance_df, config.DATA_CONFIG['FEATURE_IMPORTANCE'])
+
+
+    # Causal Tree 可視化
+    visualization.plot_causal_tree(
+        model,
+        config.CAUSAL_FOREST_CONFIG['MAX_DEPTH'],
+        config.CAUSAL_FOREST_CONFIG['MIN_SAMPLES_LEAF']
+    )
+
+
+    # SHAP 特徵貢獻度可視化
+    visualization.plot_shap_feature_importance(model)
+
+
+
+
+
+    # causal_forest = model.model.model_final_
+    #
+    # visualization.plot_shap_analysis(
+    #     causal_forest,
+    #     model.data[model.feature_columns],
+    #     model.feature_columns
+    # )
 
 if __name__ == '__main__':
     main()
