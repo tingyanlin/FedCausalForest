@@ -1,0 +1,11 @@
+fate_config:
+
+  # Docker Nodes, use lowercase for docker nodes
+  base_party_id: 10000
+  num_fate_nodes: 3
+
+  fate_version: "{{ common.versions.fate_version }}"
+
+  fate_board_port: 8081
+  fate_flow_grpc_port: 9360 # gRPC Port for FATE-Flow
+  fate_flow_http_port: 9380 # HTTP Port for FATE-Flow

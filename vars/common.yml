@@ -1,0 +1,9 @@
+common:
+  versions:
+    fate_version: "2.2.0"
+
+
+
+    mysql_version: "8.0.28"
+
+

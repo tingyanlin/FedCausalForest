@@ -1,0 +1,29 @@
+- name: Setup Federated Causal Forest Environment with Docker
+  hosts: localhost
+  become: yes
+
+  tasks:
+    # Include Files
+    - name: Load All packages Files
+      ansible.builtin.include_vars:
+        dir: ../packages
+        extensions: [ "yml" ]
+
+    - name: Load All vars Files
+      ansible.builtin.include_vars:
+        dir: ../vars
+        extensions: ["yml"]
+
+
+    # Include Tasks
+#    - name: Include Tasks for Docker Image Setup
+#      ansible.builtin.import_tasks: image_setup.yml
+#
+#    - name: Include Tasks for Docker Network Setup
+#      ansible.builtin.import_tasks: network_setup.yml
+#
+#    - name: Include Tasks for MySQL Setup
+#      ansible.builtin.import_tasks: mysql_setup.yml
+
+    - name: Include Tasks for FATE
+      ansible.builtin.import_tasks: fate_setup.yml

@@ -1,0 +1,12 @@
+# Conda Environment Setup
+
+# Miniconda Installation URL and Installer File
+miniconda_url: "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+miniconda_installer: "Miniconda3-latest-Linux-x86_64.sh"
+
+
+# Conda Environment Name
+environment_name: causal_forest
+
+# Python Version for the Environment
+python_version: "3.11"

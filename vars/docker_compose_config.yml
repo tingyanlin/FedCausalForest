@@ -1,0 +1,6 @@
+# Docker Network, Use Lowercase for Docker Network
+
+DOCKER_NETWORK: "{{ docker_config.yml.NETWORK }}"
+DOCKER_PORTS:
+  mysql: "3306:3306"
+  redis: "6379:6379"

@@ -1,0 +1,35 @@
+# Validate Docker Images Existence
+- name: Validate Docker Image Existence
+  community.docker.docker_image_info:
+    name: "{{ item.name }}:{{ item.version }}"
+  register: image_info
+  loop: "{{ docker_config.images }}"
+  tags: image-check
+
+# Display Not Ready Docker Images
+- name: Display Not Ready Docker Images
+  ansible.builtin.debug:
+    msg: "Docker Image {{ item.item.name }}:{{ item.item.version }} Not Found Locally"
+  loop: "{{ image_info.results }}"
+  when: item.images | length == 0
+  tags: image-check
+
+# Pull Required Docker Images
+- name: Pull Required Docker Images
+  community.docker.docker_image:
+    name: "{{ item.item.name }}:{{ item.item.version }}"
+    source: pull
+  loop: "{{ image_info.results }}"
+  when: item.images | length == 0
+  retries: 3
+  delay: 10
+  register: pull_results
+  until: pull_results is success
+  tags: image-pull
+
+
+
+
+
+
+

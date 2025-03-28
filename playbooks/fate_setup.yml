@@ -1,0 +1,52 @@
+# Display Current Playbook File Name
+- name: Display Current Playbook File Name
+  block:
+    - set_fact:
+        playbook_name: "{{ playbook_dir | basename }}"
+    - debug:
+        msg: "Currently running playbook: {{ playbook_name }}"
+
+
+# Check Existing FATE Containers
+- name: Check Existing FATE Containers
+  community.docker.docker_container_info:
+    name: "fate_{{ (fate_config.base_party_id | int) + item }}"
+  loop: "{{ range(0, fate_config.num_fate_nodes | int) | list }}"
+  register: fate_nodes_check
+  ignore_errors: yes
+  tags: fate-check
+
+
+# Deploy FATE Containers
+- name: Deploy FATE Containers
+  community.docker.docker_container:
+    name: "fate_{{ fate_config.base_party_id + item }}"
+    image: "federatedai/standalone_fate:{{ fate_config.fate_version }}"
+    state: started
+    restart_policy: unless-stopped
+    env:
+      FATE_PARTY_ID: "{{ fate_config.base_party_id + item }}"
+      FATE_NODE_ROLE: "{{ 'master' if item ==0 else 'host' }}"
+    ports:
+      - "{{ (fate_config.fate_board_port | int) + item }}:8080"
+    networks:
+      - name: "{{ docker_config.network.name }}"
+    volumes:
+      - type: volume
+        source: fate_party_{{ fate_config.base_party_id + item }}_vol
+        target: /mnt/data
+        volume:
+          nocopy: true
+    tty: yes  # 對應 -it
+    interactive: yes  # 對應 -it
+  loop: "{{ range(0, fate_config.num_fate_nodes | int) | list }}"
+  loop_control:
+    loop_var: item
+    index_var: loop_index
+  when:
+    - fate_nodes_check is not failed
+    - not fate_nodes_check.results[item].exists
+  register: fate_containers
+  retries: "{{ docker_config.health_check.container_retries }}"
+  delay: "{{ docker_config.health_check.retry_delay }}"
+  tags: fate-create

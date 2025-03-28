@@ -1,0 +1,64 @@
+- name: Deploy FATE Environment with Docker Compose
+  hosts: localhost
+  become: yes
+  vars_files:
+    - ../vars/docker_config.yml
+    - ../vars/fate_config.yml
+    - ../vars/msql_config.yml
+    - ../vars/.env
+
+  tasks:
+    # Generate .env File for Docker Compose
+    - name: Generate .env File for Docker Compose
+      copy:
+        dest: "../vars/.env"
+        content: |
+          DOCKER_IMAGES={{ docker_config.IMAGES | join(',') }}
+          DOCKER_NETWORK={{ docker_config.NETWORK }}
+          DOCKER_NODES={{ docker_config.NODES | join(',') }}
+          
+          
+          DOCKER_FATE_VERSION={{ fate_config.FATE_VERSION }}
+          DOCKER_FATE_PARTY_ID={{ fate_config.FATE_PARTY_ID }}
+          DOCKER_FATE_FLOW_GRPC_PORT={{ fate_config.FATE_FLOW_GRPC_PORT }}
+          DOCKER_FATE_FLOW_HTTP_PORT={{ fate_config.FATE_FLOW_HTTP_PORT }}
+          DOCKER_FATE_SERVING_PORT={{ fate_config.FATE_SERVING_PORT }}
+          DOCKER_FATE_BOARD_UI_PORT={{ fate_config.FATE_BOARD_UI_PORT }}
+          DOCKER_FATE_BOARD_ADMIN_PORT={{ fate_config.FATE_BOARD_ADMIN_PORT }}
+          DOCKER_FATE_BOARD_HTTP_PORT={{ fate_config.FATE_BOARD_HTTP_PORT }}
+          DOCKER_FATE_BOARD_SERVER_ADDRESS={{ fate_config.FATE_BOARD_SERVER_ADDRESS }}
+          
+                
+          DOCKER_MYSQL_VERSION={{ mysql_config.MYSQL_VERSION }}
+          DOCKER_MYSQL_ROOT_PASSWORD={{ mysql_config.MYSQL_ROOT_PASSWORD }}
+          DOCKER_MYSQL_DATABASE={{ mysql_config.MYSQL_DATABASE }}
+          DOCKER_MYSQL_USER={{ mysql_config.MYSQL_USER }}
+          DOCKER_MYSQL_PASSWORD={{ mysql_config.MYSQL_PASSWORD }}
+          DOCKER_MYSQL_PORT={{ mysql_config.MYSQL_PORT }}
+          DOCKER_MYSQL_HEALTHCHECK_INTERVAL={{ mysql_config.MYSQL_HEALTHCHECK_INTERVAL }}
+          DOCKER_MYSQL_HEALTHCHECK_TIMEOUT={{ mysql_config.MYSQL_HEALTHCHECK_TIMEOUT }}
+          DOCKER_MYSQL_HEALTHCHECK_RETRIES={{ mysql_config.MYSQL_HEALTHCHECK_RETRIES }}
+          
+          
+          DOCKER_REDIS_VERSION={{ redis_config.REDIS_VERSION }}
+          DOCKER_REDIS_PASSWORD={{ redis_config.REDIS_PASSWORD }}
+          DOCKER_REDIS_PORT={{ redis_config.REDIS_PORT }}
+          DOCKER_REDIS_HEALTHCHECK_INTERVAL={{ redis_config.REDIS_HEALTHCHECK_INTERVAL }}
+          DOCKER_REDIS_HEALTHCHECK_TIMEOUT={{ redis_config.REDIS_HEALTHCHECK_TIMEOUT }}
+          DOCKER_REDIS_HEALTHCHECK_RETRIES={{ redis_config.REDIS_HEALTHCHECK_RETRIES }}
+      when: docker_config is defined
+
+    # Deploy FATE using Docker Compose
+    - name: Deploy FATE using Docker Compose
+      docker_compose:
+        project_src: "../docker/docker-compose.yml"
+        restarted: yes
+        stopped: no
+      environment:
+        DOCKER_BUILDKIT: 1
+      register: deploy_fate_output
+
+    # Display Output of Docker Compose Deployment
+    - name: Display Output of Docker Compose Deployment
+      debug:
+        msg: deploy_fate_output

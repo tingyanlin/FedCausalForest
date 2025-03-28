@@ -1,0 +1,29 @@
+# Validate Docker Network Existence
+- name: Validate Docker Network Existence
+  community.docker.docker_network_info:
+    name: "{{ docker_config.network }}"
+  register: network_info
+  tags: network-check
+
+# Display Docker Network Status
+- name: Display Docker Network Status
+  ansible.builtin.debug:
+    msg: "Docker Network {{ docker_config.network }} Does Not Exist"
+  when: not network_info.exists
+  tags: network-check
+
+# Create Network with Advanced Parameters
+- name: Create Network with Advanced Parameters
+  community.docker.docker_network:
+    name: "{{ docker_config.network.name }}"
+    driver: "{{ docker_config.network.driver }}"
+    ipam_config:
+      - subnet: "{{ docker_config.network.ipam.config[0].subnet }}"
+        gateway: "{{ docker_config.network.ipam.config[0].gateway }}"
+    state: present
+  when: not network_info.exists
+  register: network_create
+  retries: 3
+  delay: 10
+  until: network_create is success
+  tags: network-create

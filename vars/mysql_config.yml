@@ -1,0 +1,10 @@
+mysql_config:
+  # MySQL Database Configuration
+
+  mysql_version: "{{ common.versions.mysql_version }}"
+  mysql_host: "localhost"
+  mysql_port: "3306"
+  mysql_root_password: "12345"
+  mysql_database: "fate_db"
+  mysql_user: "fate_user"
+  mysql_password: "12345"

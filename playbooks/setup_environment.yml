@@ -3,7 +3,8 @@
   become: yes
   vars_files:
     - ../default/packages.yml
-    - ../default/config.yml
+    - ../default/docker_config.yaml
+    - ../default/conda_config.yml
 
   tasks:
     # 下載 miniconda
@@ -13,7 +14,7 @@
           cd /home && \
           wget {{ miniconda_url }} && \
           chmod +x {{ miniconda_installer }}"
-      loop: "{{ nodes }}"
+      loop: "{{ docker_nodes }}"
 
     # 安裝  miniconda
     - name: Install Miniconda in All Containers
@@ -25,7 +26,7 @@
         
           echo 'export PATH=/root/miniconda3/bin:$PATH' >> /root/.bashrc && \
           source /root/.bashrc"
-      loop: "{{ nodes }}"
+      loop: "{{ docker_nodes }}"
 
     # 建立虛擬環境與安裝套件
     - name: Create Conda Environment and Install Python Packages in All Containers
@@ -37,4 +38,4 @@
           conda create --name {{ environment_name }} python={{ python_version }} -y
           conda activate {{ environment_name }} && \
           conda install -y -c conda-forge {{ python_packages | join(' ') }}"
-      loop: "{{ nodes }}"
+      loop: "{{ docker_nodes }}"

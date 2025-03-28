@@ -1,0 +1,52 @@
+docker_config:
+  # Docker Images
+  images:
+    - name: federatedai/standalone_fate
+      version: "{{ common.versions.fate_version }}"
+    - name: federatedai/eggroll
+      version: "3.2.0-release"
+    - name: federatedai/fateflow
+      version: "2.2.0-release"
+    - name: federatedai/osx
+      version: "2.2.0-release"
+    - name: federatedai/fateboard
+      version: "2.1.1-release"
+    - name: mysql
+      version: "{{ common.versions.mysql_version }}"
+
+
+  # Docker Network, use lowercase for docker network
+  network:
+    name: causal_forest_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
+          gateway: 172.28.0.1
+
+
+
+
+
+  # Check Container Health Status
+  health_check:
+    container_timeout: 300 # Timeout for waiting for the container to start
+    container_retries: 3 # Maximum retry count when the container fails to start
+    retry_delay: 10 # Delay (in seconds) before each retry
+
+
+
+
+
+
+
+
+
+
+
+
+  nodes:
+    - client_1_node
+    - client_2_node
+    - exchange-node
+

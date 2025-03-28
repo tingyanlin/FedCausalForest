@@ -1,0 +1,68 @@
+# Check Existing MySQL Container
+- name: Check Existing MySQL Container
+  community.docker.docker_container_info:
+    name: mysql
+  register: mysql_container_info
+  ignore_errors: yes
+  tags: mysql-check
+
+# Display Not Ready MySQL Container
+- name: Display Not Ready MySQL Container
+  ansible.builtin.debug:
+    msg: "MySQL Docker Container Not Found"
+  when:
+    - mysql_container_info is not failed
+    - not mysql_container_info.exists
+  tags: mysql-check
+
+# Create MySQL Container
+- name: Create MySQL Container
+  community.docker.docker_container:
+    name: mysql
+    image: "mysql:{{ mysql_config.mysql_version }}"
+    state: started
+    restart_policy: unless-stopped
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_config.mysql_root_password }}"
+      MYSQL_DATABASE: "{{ mysql_config.mysql_database }}"
+      MYSQL_USER: "{{ mysql_config.mysql_user }}"
+      MYSQL_PASSWORD: "{{ mysql_config.mysql_password }}"
+    published_ports:
+      - "{{ mysql_config.mysql_port }}:3306/tcp"
+    volumes:
+      - type: volume
+        source: mysql_data
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
+    networks:
+      - name: "{{ docker_config.network.name }}"
+  when:
+    - mysql_container_info is not failed
+    - not mysql_container_info.exists
+  register: mysql_container
+  retries: "{{ docker_config.health_check.container_retries }}"
+  delay: "{{ docker_config.health_check.retry_delay }}"
+  until: mysql_container is success
+  tags: mysql-create
+
+## Wait for MySQL to be Ready
+#- name: Wait for MySQL to be Ready
+#  community.mysql.mysql_query:
+#    login_host: "{{ mysql_config.mysql_host }}"
+#    login_port: "{{ mysql_config.mysql_port }}"
+#    login_user: root
+#    login_password: "{{ mysql_config.mysql_root_password }}"
+#    query: "SELECT 1"
+#  register: mysql_health
+#  retries: "{{ docker_config.health_check.container_restart_retries }}"
+#  delay: "{{ docker_config.health_check.container_restart_delay }}"
+#  until: mysql_health is success
+#  tags: mysql-health
+#
+## Display MySQL Container Creation Status
+#- name: Display MySQL Container Creation Status
+#  ansible.builtin.debug:
+#    msg: "MySQL Container Has Been Successfully Created and Started!"
+#  when: mysql_container.changed
+#  tags: mysql-create

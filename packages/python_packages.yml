@@ -1,7 +1,3 @@
-linux_packages:
-  - wget
-
-
 python_packages:
   - numpy
   - pandas
