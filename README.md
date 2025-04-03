@@ -13,6 +13,6 @@ pip install ansible
 ansible-playbook main.yml
 ```
 
-#### 2. Federated Learning [FATE](https://github.com/FederatedAI/FATE)
+#### 2. Federated Learning [FATE官方GitHub](https://github.com/FederatedAI/FATE)
 
 #### 3. EconML  [EconML官方文檔](https://econml.azurewebsites.net/)
